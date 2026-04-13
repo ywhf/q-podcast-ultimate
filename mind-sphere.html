@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mind Sphere 播客 | 思界</title>
+    
+    <!-- 小赖字体本地版 -->
+    <style>
+        @font-face {
+            font-family: 'Xiaolai';
+            src: url('fonts/XiaolaiMono-Regular.ttf') format('truetype');
+            font-weight: normal;
+        }
+    </style>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #a8d8ea;        /* 粉蓝 */
+            --secondary: #eae2a8;      /* 姜黄 */
+            --dark: #000000;           /* 黑色 */
+            --light: #ffffff;          /* 白色 */
+            
+            --font-display: 'Xiaolai', sans-serif;
+            --font-body: 'Xiaolai', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        /* ========== 导航栏 ========== */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            border-bottom: 3px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(168, 216, 234, 0.15);
+        }
+
+        .nav-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 700;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 6px 12px rgba(168, 216, 234, 0.3));
+        }
+
+        .logo-emoji {
+            font-size: 2.2rem;
+            animation: bounce 0.6s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-weight: 600;
+            color: var(--dark);
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* ========== 主容器 ========== */
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* ========== Hero ========== */
+        .hero {
+            padding: 6rem 0 4rem;
+            position: relative;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            color: var(--dark);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-text h1 .highlight {
+            color: var(--primary);
+            display: inline-block;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            font-family: var(--font-body);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.9rem 1.8rem;
+            border: 2px solid var(--primary);
+            background: var(--light);
+            color: var(--primary);
+            border-radius: 50px;
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: var(--primary);
+            color: var(--light);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(168, 216, 234, 0.3);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--light);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--dark);
+            border-color: var(--dark);
+            color: var(--primary);
+        }
+
+        /* ========== Q 女士头像 ========== */
+        .q-character {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            animation: float-character 3s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes float-character {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        /* 背后蓝色泡泡 */
+        .q-bubble {
+            position: absolute;
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle at 30% 30%, rgba(168, 216, 234, 0.4), rgba(168, 216, 234, 0.1));
+            border-radius: 50%;
+            filter: blur(40px);
+            z-index: 0;
+            animation: bubble-float 4s ease-in-out infinite;
+            box-shadow: 0 0 80px rgba(168, 216, 234, 0.3), inset 0 0 40px rgba(168, 216, 234, 0.2);
+        }
+
+        @keyframes bubble-float {
+            0%, 100% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.1) translateY(-10px); }
+        }
+
+        /* 文字环绕容器 */
+        .q-wrapper {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .q-image {
+            width: 280px;
+            height: auto;
+            border-radius: 20px;
+            filter: drop-shadow(0 12px 30px rgba(168, 216, 234, 0.25));
+            transition: all 0.3s;
+            position: relative;
+            z-index: 2;
+        }
+
+        .q-image:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 16px 40px rgba(168, 216, 234, 0.35));
+        }
+
+        /* 圆弧文字 SVG */
+        .q-circle-text {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .q-circle-text svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 2px 4px rgba(168, 216, 234, 0.2));
+        }
+
+        .q-circle-text text {
+            font-family: 'Xiaolai', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            fill: var(--primary);
+            letter-spacing: 8px;
+            animation: rotate-text 20s linear infinite;
+        }
+
+        @keyframes rotate-text {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========== 集数区块 ========== */
+        .episodes {
+            padding: 6rem 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(168, 216, 234, 0.08) 50%, transparent 100%);
+            border-radius: 40px;
+            margin: 4rem 0;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            text-align: center;
+            color: var(--dark);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '✨';
+            display: block;
+            font-size: 1.5rem;
+            margin-top: 0.5rem;
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .episode-card {
+            background: var(--light);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(168, 216, 234, 0.1);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--primary);
+        }
+
+        .episode-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(168, 216, 234, 0.15), transparent);
+            border-radius: 50%;
+            transition: all 0.4s;
+        }
+
+        .episode-card:hover {
+            transform: translateY(-12px) rotate(2deg);
+            box-shadow: 0 16px 40px rgba(168, 216, 234, 0.2);
+        }
+
+        .episode-card:hover::before {
+            top: -20%;
+            right: -20%;
+        }
+
+        .episode-number {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+            font-weight: 700;
+        }
+
+        .episode-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin-bottom: 0.8rem;
+            position: relative;
+            z-index: 1;
+            font-weight: 700;
+        }
+
+        .episode-desc {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+            font-family: var(--font-body);
+        }
+
+        .episode-tag {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .play-btn {
+            margin-top: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--primary);
+            color: var(--light);
+            border: none;
+            border-radius: 50px;
+            font-family: var(--font-body);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(168, 216, 234, 0.3);
+        }
+
+        /* ========== 特色区块 ========== */
+        .features {
+            padding: 6rem 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(168, 216, 234, 0.1), rgba(234, 226, 168, 0.1));
+            border-radius: 20px;
+            border: 2px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(168, 216, 234, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-family: var(--font-body);
+        }
+
+        /* ========== 订阅区块 ========== */
+        .subscribe {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 30px;
+            text-align: center;
+            margin: 6rem 0;
+            box-shadow: 0 12px 40px rgba(168, 216, 234, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subscribe::before {
+            content: '🎙️';
+            position: absolute;
+            font-size: 200px;
+            opacity: 0.1;
+            top: -50px;
+            right: -50px;
+            animation: float-slow 8s ease-in-out infinite;
+        }
+
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .subscribe h2 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            font-weight: 700;
+        }
+
+        .subscribe p {
+            color: var(--dark);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+            font-family: var(--font-body);
+        }
+
+        .platform-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .platform-btn {
+            padding: 0.9rem 1.8rem;
+            background: var(--light);
+            color: var(--primary);
+            border: 2px solid var(--light);
+            border-radius: 50px;
+            font-family: var(--font-body);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .platform-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ========== 页脚 ========== */
+        footer {
+            padding: 4rem 2rem;
+            text-align: center;
+            border-top: 2px solid var(--primary);
+            background: var(--light);
+        }
+
+        footer p {
+            color: var(--dark);
+            margin: 0.8rem 0;
+        }
+
+        .footer-quote {
+            font-style: italic;
+            color: var(--primary);
+            font-weight: 600;
+            margin: 2rem 0;
+            font-size: 0.95rem;
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 768px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .q-character {
+                max-width: 250px;
+                order: -1;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .episodes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .subscribe {
+                margin: 3rem 0;
+                padding: 3rem 1.5rem;
+            }
+
+            .platform-buttons {
+                flex-direction: column;
+            }
+
+            .platform-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- 导航 -->
+<nav>
+    <div class="nav-content">
+        <div class="logo">
+            <span class="logo-emoji">🧠</span>
+            Mind Sphere
+        </div>
+        <ul class="nav-links">
+            <li><a href="#episodes">集数</a></li>
+            <li><a href="#features">亮点</a></li>
+            <li><a href="#subscribe">订阅</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main>
+    <!-- Hero 部分 -->
+    <section class="hero container">
+        <div class="hero-grid">
+            <div class="hero-text">
+                <h1>欢迎来到<br><span class="highlight">Mind Sphere</span></h1>
+                <p class="hero-subtitle">
+                    思界播客，一个探索思想、碰撞观点的地方。<br>
+                    我们相信每个人都有独特的想法值得被听见。<br>
+                    在这里，我们一起思考，一起成长。
+                </p>
+                <div class="btn-group">
+                    <button class="btn btn-primary">🎧 现在收听</button>
+                    <button class="btn">📧 获取更新</button>
+                </div>
+            </div>
+
+            <!-- Q 女士 -->
+            <div class="q-character">
+                <!-- 背后蓝色泡泡 -->
+                <div class="q-bubble"></div>
+                
+                <!-- 头像容器 -->
+                <div class="q-wrapper">
+                    <!-- 圆弧文字环绕 -->
+                    <div class="q-circle-text">
+                        <svg viewBox="0 0 350 350" preserveAspectRatio="xMidYMid meet">
+                            <defs>
+                                <path id="circlePath" d="M 175, 175 m -150, 0 a 150,150 0 1,1 300,0 a 150,150 0 1,1 -300,0" fill="none"/>
+                            </defs>
+                            <text>
+                                <textPath href="#circlePath" startOffset="0%" text-anchor="middle">
+                                    ✦ mindsphere.art  mindsphere.art  mindsphere.art ✦
+                                </textPath>
+                            </text>
+                        </svg>
+                    </div>
+                    
+                    <!-- Q 女士头像 -->
+                    <img src="images/q-character.png" alt="Mind Sphere 主播" class="q-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 集数区块 -->
+    <section class="episodes container" id="episodes">
+        <h2 class="section-title">最新集数</h2>
+        <div class="episodes-grid">
+            <div class="episode-card">
+                <div class="episode-number">S1E10</div>
+                <div class="episode-title">思界闭环</div>
+                <p class="episode-desc">当所有的思考都连接在一起时，我们才能看到完整的世界。</p>
+                <span class="episode-tag">💡 深度思考</span>
+                <button class="play-btn">▶️ 播放</button>
+            </div>
+
+            <div class="episode-card">
+                <div class="episode-number">S1E09</div>
+                <div class="episode-title">观点碰撞</div>
+                <p class="episode-desc">不同的声音才能创造更丰富的思考。这期我们探讨对话的艺术。</p>
+                <span class="episode-tag">🗣️ 对话</span>
+                <button class="play-btn">▶️ 播放</button>
+            </div>
+
+            <div class="episode-card">
+                <div class="episode-number">S1E08</div>
+                <div class="episode-title">思想的力量</div>
+                <p class="episode-desc">一个想法可以改变一个人，一群想法可以改变世界。</p>
+                <span class="episode-tag">🌍 影响</span>
+                <button class="play-btn">▶️ 播放</button>
+            </div>
+
+            <div class="episode-card">
+                <div class="episode-number">S1E07</div>
+                <div class="episode-title">自我认知</div>
+                <p class="episode-desc">了解自己，才是开始思考的第一步。</p>
+                <span class="episode-tag">🪞 内观</span>
+                <button class="play-btn">▶️ 播放</button>
+            </div>
+
+            <div class="episode-card">
+                <div class="episode-number">S1E06</div>
+                <div class="episode-title">知识与智慧</div>
+                <p class="episode-desc">知识是积累的，而智慧是思考的结果。</p>
+                <span class="episode-tag">📚 学习</span>
+                <button class="play-btn">▶️ 播放</button>
+            </div>
+
+            <div class="episode-card">
+                <div class="episode-number">S1E05</div>
+                <div class="episode-title">思想的源头</div>
+                <p class="episode-desc">每一个伟大的想法都来自于好奇心和不断的提问。</p>
+                <span class="episode-tag">❓ 追问</span>
+                <button class="play-btn">▶️ 播放</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 特色区块 -->
+    <section class="features container" id="features">
+        <h2 class="section-title">Mind Sphere 的特色</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>深度思考</h3>
+                <p>不走马观花，我们深入每一个话题的本质。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌟</div>
+                <h3>多元观点</h3>
+                <p>邀请各领域的思考者，碰撞不同的观点。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>实用启发</h3>
+                <p>不只是谈论，更重要的是给你可以应用的思考方法。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💭</div>
+                <h3>开放讨论</h3>
+                <p>没有绝对的答案，只有一起探索的过程。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 订阅区块 -->
+    <section class="subscribe" id="subscribe">
+        <h2>开始思考之旅</h2>
+        <p>每周一集新的思想碰撞，让我们一起探索世界</p>
+        <div class="platform-buttons">
+            <button class="platform-btn" onclick="alert('小宇宙链接')">🎧 小宇宙</button>
+            <button class="platform-btn" onclick="alert('小红书链接')">📱 小红书</button>
+            <button class="platform-btn" onclick="alert('喜马拉雅链接')">🔊 喜马拉雅</button>
+            <button class="platform-btn" onclick="alert('Apple Podcasts 链接')">📻 Apple Podcasts</button>
+        </div>
+    </section>
+</main>
+
+<!-- 页脚 -->
+<footer>
+    <p>© 2025-2026 Mind Sphere 播客</p>
+    <p class="footer-quote">
+        "思考，让我们连接。<br>
+        对话，让我们成长。"
+    </p>
+    <p style="font-size: 0.85rem; color: #999; margin-top: 1.5rem;">
+        🧠 每周一集 | 💭 深度对话 | 🌟 思想碰撞
+    </p>
+</footer>
+
+<script>
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // 按钮点击反馈
+    document.querySelectorAll('.btn, .play-btn, .platform-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 100);
+        });
+    });
+
+    // 卡片进入动画
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.episode-card, .feature-card').forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        observer.observe(card);
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+{
+  "name": "q-podcast-ultimate",
+  "version": "1.0.0",
+  "description": "毒舌 Q 的十日谈 - 沉浸式播客品牌体验网站",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "start-node": "npx http-server",
+    "build": "echo 'Static site - no build needed'",
+    "deploy": "git push -u origin master"
+  },
+  "keywords": [
+    "podcast",
+    "Q",
+    "十日谈",
+    "interactive",
+    "3D",
+    "web"
+  ],
+  "author": "ywhf",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ywhf/q-podcast-ultimate.git"
+  },
+  "homepage": "https://ywhf.github.io/q-podcast-ultimate",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
